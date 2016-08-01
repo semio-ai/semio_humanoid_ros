@@ -6,7 +6,7 @@ foreach(node ${nodes})
   add_dependencies(${node} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
   target_link_libraries(${node}
     ${catkin_LIBRARIES}
-    semio
+    ${PROJECT_NAME}
   )
 endforeach()
 

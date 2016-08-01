@@ -4,7 +4,7 @@
 
 #include <semio_msgs_ros/Humanoids.h>
 
-#include <semio/recognition/humanoid_source_NiTE.h>
+#include <semio/ros/humanoid_source_adapter.h>
 
 class SemioHumanoidServerNode
 {
@@ -16,12 +16,13 @@ public:
     ros::NodeHandle nh_rel_;
     ros::Publisher humanoids_pub_;
 
-    semio::HumanoidSourceNiTE humanoid_source_;
+    semio::HumanoidSource::Ptr humanoid_source_ptr_;
 
-    SemioHumanoidServerNode( ros::NodeHandle & nh_rel )
+    SemioHumanoidServerNode( ros::NodeHandle & nh_rel, semio::HumanoidSource::Ptr humanoid_source_ptr )
     :
         nh_rel_( nh_rel ),
-        humanoids_pub_( nh_rel_.advertise<_HumanoidsMsg>( "humanoids", 10 ) )
+        humanoids_pub_( nh_rel_.advertise<_HumanoidsMsg>( "humanoids", 10 ) ),
+        humanoid_source_ptr_( humanoid_source_ptr )
     {
         //
     }
@@ -32,7 +33,7 @@ public:
 
         while( ros::ok() )
         {
-            semio::HumanoidArray const & humanoids = humanoid_source_.update();
+            semio::HumanoidArray const & humanoids = humanoid_source_ptr_->update();
 
             _HumanoidsMsg humanoids_msg;
 
@@ -82,7 +83,9 @@ int main( int argc, char ** argv )
     ros::init( argc, argv, "semio_humanoid_server_node" );
     ros::NodeHandle nh_rel( "~" );
 
-    SemioHumanoidServerNode semio_humanoid_server_node( nh_rel );
+    semio::ros::HumanoidSourceAdapter humanoid_source_adapter( nh_rel );
+
+    SemioHumanoidServerNode semio_humanoid_server_node( nh_rel, humanoid_source_adapter.getHumanoidSource() );
     semio_humanoid_server_node.spin();
 
     return 0;
