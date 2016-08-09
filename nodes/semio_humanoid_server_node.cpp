@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <ros/ros.h>
 
 #include <semio_msgs_ros/Humanoids.h>
