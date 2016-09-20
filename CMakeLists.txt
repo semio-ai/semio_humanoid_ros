@@ -15,6 +15,7 @@ pkg_check_modules(GSL REQUIRED gsl)
 
 # define semio_LIBRARIES so dependent packages automatically link against it
 set(semio_LIBRARIES semio)
+set(semio_FOUND TRUE)
 
 # remove drivers from OpenNI2_LIBRARIES
 list(GET OpenNI2_LIBRARIES 0 OpenNI2_LIBRARIES)
