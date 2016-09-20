@@ -27,7 +27,7 @@ semio::HumanoidArray semio::ros::HumanoidSourceROS::updateFromSource()
             {
                 joints.emplace( std::make_pair( static_cast<semio::HumanoidJoint::JointType>( joint_msg.type ), semio::HumanoidJoint(
                     static_cast<semio::HumanoidJoint::JointType>( joint_msg.type ),
-                    Eigen::Translation3d( joint_msg.position.x, joint_msg.position.y, joint_msg.position.z ),
+                    Eigen::Vector3d( joint_msg.position.x, joint_msg.position.y, joint_msg.position.z ),
                     Eigen::Quaterniond( joint_msg.orientation.w, joint_msg.orientation.x, joint_msg.orientation.y, joint_msg.orientation.z ),
                     joint_msg.position_confidence,
                     joint_msg.orientation_confidence ) ) );
