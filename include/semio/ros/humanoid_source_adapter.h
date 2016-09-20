@@ -1,11 +1,9 @@
 #ifndef _SEMIO_ROS_HUMANOIDSOURCEADAPTER_H_
 #define _SEMIO_ROS_HUMANOIDSOURCEADAPTER_H_
 
-#include <semio/ros/humanoid_source_ros.h>
-#include <semio/recognition/humanoid_source_virtual.h>
-#include <semio/recognition/humanoid_source_NiTE.h>
-
+#include <semio/recognition/humanoid_source.h>
 #include <ros/node_handle.h>
+#include <string>
 
 namespace semio
 {
@@ -20,7 +18,7 @@ protected:
     std::string _default_source;
 
 public:
-    HumanoidSourceAdapter( ::ros::NodeHandle & nh_rel, std::string const & default_source = "nite" );
+    HumanoidSourceAdapter( ::ros::NodeHandle & nh_rel, std::string const & default_source = "fullbody" );
 
     HumanoidSource::Ptr getHumanoidSource( std::string const & source = "param" );
 };
