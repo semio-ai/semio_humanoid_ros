@@ -14,11 +14,11 @@ namespace ros
 class HumanoidSourceAdapter
 {
 protected:
-    ::ros::NodeHandle & _nh_rel;
+    ::ros::NodeHandle _nh_rel;
     std::string _default_source;
 
 public:
-    HumanoidSourceAdapter( ::ros::NodeHandle & nh_rel, std::string const & default_source = "fullbody" );
+    HumanoidSourceAdapter( ::ros::NodeHandle const & nh_rel, std::string const & default_source = "fullbody" );
 
     HumanoidSource::Ptr getHumanoidSource( std::string const & source = "param" );
 };

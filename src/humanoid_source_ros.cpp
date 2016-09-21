@@ -1,6 +1,6 @@
 #include <semio/ros/humanoid_source_ros.h>
 
-semio::ros::HumanoidSourceROS::HumanoidSourceROS( ::ros::NodeHandle & nh_rel )
+semio::ros::HumanoidSourceROS::HumanoidSourceROS( ::ros::NodeHandle const & nh_rel )
 :
     _nh_rel( nh_rel ),
     _humanoids_sub( _nh_rel.subscribe( "humanoids", 10, &HumanoidSourceROS::humanoidsCB, this ) )

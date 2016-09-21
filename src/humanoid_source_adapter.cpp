@@ -6,7 +6,7 @@
 #include <semio/recognition/humanoid_source_openface.h>
 #include <semio/recognition/humanoid_source_fullbody.h>
 
-semio::ros::HumanoidSourceAdapter::HumanoidSourceAdapter( ::ros::NodeHandle & nh_rel, std::string const & default_source )
+semio::ros::HumanoidSourceAdapter::HumanoidSourceAdapter( ::ros::NodeHandle const & nh_rel, std::string const & default_source )
 :
     _nh_rel( nh_rel ),
     _default_source( default_source )

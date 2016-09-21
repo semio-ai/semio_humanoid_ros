@@ -19,12 +19,12 @@ public:
     typedef semio_msgs_ros::HumanoidJoint _HumanoidJointMsg;
 
 protected:
-    ::ros::NodeHandle & _nh_rel;
+    ::ros::NodeHandle _nh_rel;
     ::ros::Subscriber _humanoids_sub;
     _HumanoidsMsg::ConstPtr _last_humanoids_msg;
 
 public:
-    HumanoidSourceROS( ::ros::NodeHandle & nh_rel );
+    HumanoidSourceROS( ::ros::NodeHandle const & nh_rel );
 
 protected:
     HumanoidArray updateFromSource();
