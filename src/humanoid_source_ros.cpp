@@ -10,13 +10,13 @@ semio::ros::HumanoidSourceROS::HumanoidSourceROS( ::ros::NodeHandle const & nh_r
 
 semio::HumanoidArray semio::ros::HumanoidSourceROS::updateFromSource()
 {
-    _HumanoidsMsg::ConstPtr const & msg_ptr( _last_humanoids_msg );
-    _HumanoidsMsg const & msg( *msg_ptr );
-
     semio::HumanoidArray humanoids;
 
     if( _last_humanoids_msg )
     {
+        _HumanoidsMsg::ConstPtr const & msg_ptr( _last_humanoids_msg );
+        _HumanoidsMsg const & msg( *msg_ptr );
+
         humanoids.reserve( msg.humanoids.size() );
 
         for( auto const & humanoid_msg : msg.humanoids )
@@ -35,6 +35,7 @@ semio::HumanoidArray semio::ros::HumanoidSourceROS::updateFromSource()
             humanoids.emplace_back( humanoid_msg.id, static_cast<semio::Humanoid::TrackingState>( humanoid_msg.tracking_state ), joints );
         }
     }
+
     return humanoids;
 }
 
