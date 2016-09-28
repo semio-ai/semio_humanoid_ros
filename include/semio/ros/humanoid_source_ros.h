@@ -26,6 +26,10 @@ protected:
 public:
     HumanoidSourceROS( ::ros::NodeHandle const & nh_rel );
 
+    static HumanoidJoint fromROSMsg( _HumanoidJointMsg const & msg );
+    static Humanoid fromROSMsg( _HumanoidMsg const & msg );
+    static HumanoidArray fromROSMsg( _HumanoidsMsg const & msg );
+
 protected:
     HumanoidArray updateFromSource();
 

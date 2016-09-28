@@ -10,30 +10,47 @@ semio::ros::HumanoidSourceROS::HumanoidSourceROS( ::ros::NodeHandle const & nh_r
 
 semio::HumanoidArray semio::ros::HumanoidSourceROS::updateFromSource()
 {
-    semio::HumanoidArray humanoids;
-
     if( _last_humanoids_msg )
     {
-        _HumanoidsMsg::ConstPtr const & msg_ptr( _last_humanoids_msg );
-        _HumanoidsMsg const & msg( *msg_ptr );
+        return HumanoidSourceROS::fromROSMsg( *_last_humanoids_msg );
+        _last_humanoids_msg.reset();
+    }
 
-        humanoids.reserve( msg.humanoids.size() );
+    return HumanoidArray();
+}
 
-        for( auto const & humanoid_msg : msg.humanoids )
-        {
-            semio::Humanoid::_JointArray joints;
+semio::HumanoidJoint semio::ros::HumanoidSourceROS::fromROSMsg( _HumanoidJointMsg const & msg )
+{
+    return semio::HumanoidJoint(
+        static_cast<semio::HumanoidJoint::JointType>( msg.type ),
+        Eigen::Vector3d( msg.position.x, msg.position.y, msg.position.z ),
+        Eigen::Quaterniond( msg.orientation.w, msg.orientation.x, msg.orientation.y, msg.orientation.z ),
+        msg.position_confidence,
+        msg.orientation_confidence );
+}
 
-            for( auto const & joint_msg : humanoid_msg.joints )
-            {
-                joints.emplace( std::make_pair( static_cast<semio::HumanoidJoint::JointType>( joint_msg.type ), semio::HumanoidJoint(
-                    static_cast<semio::HumanoidJoint::JointType>( joint_msg.type ),
-                    Eigen::Vector3d( joint_msg.position.x, joint_msg.position.y, joint_msg.position.z ),
-                    Eigen::Quaterniond( joint_msg.orientation.w, joint_msg.orientation.x, joint_msg.orientation.y, joint_msg.orientation.z ),
-                    joint_msg.position_confidence,
-                    joint_msg.orientation_confidence ) ) );
-            }
-            humanoids.emplace_back( humanoid_msg.id, static_cast<semio::Humanoid::TrackingState>( humanoid_msg.tracking_state ), joints );
-        }
+semio::Humanoid semio::ros::HumanoidSourceROS::fromROSMsg( _HumanoidMsg const & msg )
+{
+    semio::Humanoid::_JointArray joints;
+
+    for( auto const & joint_msg : msg.joints )
+    {
+        joints.emplace( std::make_pair(
+            static_cast<semio::HumanoidJoint::JointType>( joint_msg.type ),
+            std::move( HumanoidSourceROS::fromROSMsg( joint_msg ) ) ) );
+    }
+
+    return semio::Humanoid( msg.id, static_cast<semio::Humanoid::TrackingState>( msg.tracking_state ), std::move( joints ) );
+}
+
+semio::HumanoidArray semio::ros::HumanoidSourceROS::fromROSMsg( _HumanoidsMsg const & msg )
+{
+    semio::HumanoidArray humanoids;
+    humanoids.reserve( msg.humanoids.size() );
+
+    for( auto const & humanoid_msg : msg.humanoids )
+    {
+        humanoids.emplace_back( std::move( HumanoidSourceROS::fromROSMsg( humanoid_msg ) ) );
     }
 
     return humanoids;
