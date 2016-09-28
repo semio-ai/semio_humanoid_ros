@@ -1,26 +1,19 @@
 #include <ros/ros.h>
 
-#include <semio_msgs_ros/Humanoids.h>
-
 #include <semio/ros/humanoid_source_adapter.h>
+#include <semio/ros/humanoid_sink_adapter.h>
 
 class SemioHumanoidServerNode
 {
+protected:
+    semio::HumanoidSource::Ptr _humanoid_source_ptr;
+    semio::HumanoidSink::Ptr _humanoid_sink_ptr;
+
 public:
-    typedef semio_msgs_ros::Humanoids _HumanoidsMsg;
-    typedef semio_msgs_ros::Humanoid _HumanoidMsg;
-    typedef semio_msgs_ros::HumanoidJoint _HumanoidJointMsg;
-
-    ros::NodeHandle nh_rel_;
-    ros::Publisher humanoids_pub_;
-
-    semio::HumanoidSource::Ptr humanoid_source_ptr_;
-
-    SemioHumanoidServerNode( ros::NodeHandle & nh_rel, semio::HumanoidSource::Ptr humanoid_source_ptr )
+    SemioHumanoidServerNode( semio::HumanoidSource::Ptr humanoid_source_ptr, semio::HumanoidSink::Ptr humanoid_sink_ptr )
     :
-        nh_rel_( nh_rel ),
-        humanoids_pub_( nh_rel_.advertise<_HumanoidsMsg>( "humanoids", 10 ) ),
-        humanoid_source_ptr_( humanoid_source_ptr )
+        _humanoid_source_ptr( humanoid_source_ptr ),
+        _humanoid_sink_ptr( humanoid_sink_ptr )
     {
         //
     }
@@ -31,45 +24,9 @@ public:
 
         while( ros::ok() )
         {
-            semio::HumanoidArray const & humanoids = humanoid_source_ptr_->update();
+            ros::spinOnce();
 
-            _HumanoidsMsg humanoids_msg;
-
-            humanoids_msg.humanoids.reserve( humanoids.size() );
-
-            for( auto const & humanoid : humanoids )
-            {
-                auto & joints( humanoid.joints_ );
-
-                _HumanoidMsg humanoid_msg;
-
-                humanoid_msg.id = humanoid.id_;
-                humanoid_msg.tracking_state = static_cast<uint32_t>( humanoid.tracking_state_ );
-                humanoid_msg.joints.reserve( joints.size() );
-
-                for( auto const & joint_item : joints )
-                {
-                    semio::HumanoidJoint const & joint( joint_item.second );
-
-                    _HumanoidJointMsg joint_msg;
-
-                    joint_msg.type = static_cast<size_t>( joint.joint_type_ );
-                    joint_msg.position_confidence = joint.position_confidence_;
-                    joint_msg.orientation_confidence = joint.orientation_confidence_;
-                    joint_msg.position.x = joint.position_.x();
-                    joint_msg.position.y = joint.position_.y();
-                    joint_msg.position.z = joint.position_.z();
-                    joint_msg.orientation.w = joint.orientation_.w();
-                    joint_msg.orientation.x = joint.orientation_.x();
-                    joint_msg.orientation.y = joint.orientation_.y();
-                    joint_msg.orientation.z = joint.orientation_.z();
-
-                    humanoid_msg.joints.push_back( std::move( joint_msg ) );
-                }
-                humanoids_msg.humanoids.push_back( std::move( humanoid_msg ) );
-            }
-
-            humanoids_pub_.publish( std::move( humanoids_msg ) );
+            _humanoid_sink_ptr->publish( _humanoid_source_ptr->update() );
 
             loop_rate.sleep();
         }
@@ -82,8 +39,9 @@ int main( int argc, char ** argv )
     ros::NodeHandle nh_rel( "~" );
 
     semio::ros::HumanoidSourceAdapter humanoid_source_adapter( nh_rel );
+    semio::ros::HumanoidSinkAdapter humanoid_sink_adapter( nh_rel, "ros" );
 
-    SemioHumanoidServerNode semio_humanoid_server_node( nh_rel, humanoid_source_adapter.getHumanoidSource() );
+    SemioHumanoidServerNode semio_humanoid_server_node( humanoid_source_adapter.getHumanoidSource(), humanoid_sink_adapter.getHumanoidSink() );
     semio_humanoid_server_node.spin();
 
     return 0;
