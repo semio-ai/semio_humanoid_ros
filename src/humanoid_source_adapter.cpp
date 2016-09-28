@@ -21,9 +21,9 @@ semio::HumanoidSource::Ptr semio::ros::HumanoidSourceAdapter::getHumanoidSource(
     if( source_type == "nite" ) return std::make_shared<semio::HumanoidSourceNiTE>();
     else if( source_type == "openface" ) return std::make_shared<semio::HumanoidSourceOpenFace>();
     else if( source_type == "fullbody" ) return std::make_shared<semio::HumanoidSourceFullBody>();
-    else if( source_type == "virtual" ) return std::make_shared<semio::HumanoidSourceVirtual>();
     else if( source_type == "ros" ) return std::make_shared<semio::ros::HumanoidSourceROS>( _nh_rel );
     else if( source_type == "none" ) return std::make_shared<semio::ros::HumanoidSourceROS>( ::ros::NodeHandle( _nh_rel, "/null" ) );
 
+    // virtual
     return std::make_shared<HumanoidSourceVirtual>();
 }
