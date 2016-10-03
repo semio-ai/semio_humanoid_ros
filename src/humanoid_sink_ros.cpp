@@ -74,7 +74,7 @@ semio::ros::HumanoidSinkROS::_HumanoidsMsg semio::ros::HumanoidSinkROS::toROSMsg
     return *HumanoidSinkROS::toROSMsgPtr( humanoids );
 }
 
-void semio::ros::HumanoidSinkROS::publish( HumanoidArray const & humanoids )
+void semio::ros::HumanoidSinkROS::publishToSink( HumanoidArray const & humanoids )
 {
     _humanoids_pub.publish( HumanoidSinkROS::toROSMsgPtr( humanoids ) );
 }

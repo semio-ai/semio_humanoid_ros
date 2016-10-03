@@ -34,7 +34,8 @@ public:
     static _HumanoidsMsg::Ptr toROSMsgPtr( HumanoidArray const & humanoids );
     static _HumanoidsMsg toROSMsg( HumanoidArray const & humanoids );
 
-    virtual void publish( HumanoidArray const & humanoids );
+protected:
+    virtual void publishToSink( HumanoidArray const & humanoids );
 };
 
 }
