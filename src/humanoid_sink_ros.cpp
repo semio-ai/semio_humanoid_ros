@@ -1,9 +1,9 @@
 #include <semio/ros/humanoid_sink_ros.h>
 
-semio::ros::HumanoidSinkROS::HumanoidSinkROS( ::ros::NodeHandle const & nh_rel )
+semio::ros::HumanoidSinkROS::HumanoidSinkROS( ::ros::NodeHandle const & nh_rel, std::string const & topic )
 :
     _nh_rel( nh_rel ),
-    _humanoids_pub( _nh_rel.advertise<_HumanoidsMsg>( "humanoids", 10 ) )
+    _humanoids_pub( _nh_rel.advertise<_HumanoidsMsg>( topic, 10 ) )
 {
     //
 }

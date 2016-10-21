@@ -24,7 +24,7 @@ protected:
     _HumanoidsMsg::ConstPtr _last_humanoids_msg;
 
 public:
-    HumanoidSourceROS( ::ros::NodeHandle const & nh_rel );
+    HumanoidSourceROS( ::ros::NodeHandle const & nh_rel, std::string const & topic = "humanoids" );
 
     static HumanoidJoint fromROSMsg( _HumanoidJointMsg const & msg );
     static Humanoid fromROSMsg( _HumanoidMsg const & msg );

@@ -23,7 +23,7 @@ protected:
     ::ros::Publisher _humanoids_pub;
 
 public:
-    HumanoidSinkROS( ::ros::NodeHandle const & nh_rel );
+    HumanoidSinkROS( ::ros::NodeHandle const & nh_rel, std::string const & topic = "humanoids" );
 
     static _HumanoidJointMsg::Ptr toROSMsgPtr( HumanoidJoint const & joint );
     static _HumanoidJointMsg toROSMsg( HumanoidJoint const & joint );
