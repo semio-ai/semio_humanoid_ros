@@ -1,0 +1,49 @@
+/**
+
+@if STANDALONE_DOC
+@mainpage semio_humanoid_ros
+@endif
+
+@if (!STANDALONE_DOC)
+@page semio_humanoid_ros semio_humanoid_ros
+@endif
+
+@section humanoid-overview Overview
+
+ROS interface for Semio humanoid software.
+
+---
+
+@section humanoid-nodes Nodes
+- @ref humanoid-semio_humanoid_server_node
+
+
+---
+@subsection humanoid-semio_humanoid_server_node semio_humanoid_server_node
+
+@subsubsection humanoid-semio_humanoid_server_node-source C++ API
+- @ref SemioHumanoidServerNode
+
+@subsubsection humanoid-semio_humanoid_server_node-params Params
+<table>
+<tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr>
+<tr><td>@b `_humanoid_sink/filter/smoothing`</td><td>`object`</td><td>`undefined`</td><td>If any smoothing parameters are defined, the server will create a separate sink for smoothed humanoids</td></tr>
+</table>
+- Any created by:
+  - semio::ros::HumanoidSourceAdapter
+  - semio::ros::HumanoidSinkAdapter
+
+@subsubsection humanoid-semio_humanoid_server_node-topics Topics
+<table>
+<tr><th>Topic</th><th>Type</th><th>Description</th></tr>
+<tr><td colspan="3" align="center">@b Publications</td></tr>
+<tr><td>@b `~humanoids/raw`</td><td>@ref semio_msgs_ros<a href=Humanoids_8msg_source.html><b>/Humanoids</b></a></td><td>List of minimally-processed humanoids</td></tr>
+</table>
+- Any created by:
+  - semio::ros::HumanoidSourceAdapter
+  - semio::ros::HumanoidSinkAdapter
+
+
+@tableofcontents
+
+**/
