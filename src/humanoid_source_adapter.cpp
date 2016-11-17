@@ -75,8 +75,8 @@ semio::HumanoidSource::Ptr semio::ros::HumanoidSourceAdapter::getHumanoidSource(
         if( smoothing_filter_ptr ) result = std::make_shared<semio::ros::HumanoidSourceROS>( _nh_rel, "humanoids/smoothed" );
         else result = std::make_shared<semio::ros::HumanoidSourceROS>( _nh_rel );
     }
-    else if( source_type == "none" ) return std::make_shared<semio::ros::HumanoidSourceROS>( ::ros::NodeHandle( _nh_rel, "/null" ) );
-    else result = std::make_shared<HumanoidSourceVirtual>();
+    else if( source_type == "virtual" ) result = std::make_shared<HumanoidSourceVirtual>();
+    else return std::make_shared<semio::ros::HumanoidSourceROS>( ::ros::NodeHandle( _nh_rel, "/null" ) );
 
     // add a smoothing filter and a basic state filter (to remove untracked smoothed humanoids)
     if( smoothing_filter_ptr )

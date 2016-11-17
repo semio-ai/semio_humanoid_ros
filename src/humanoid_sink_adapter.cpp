@@ -63,7 +63,7 @@ semio::HumanoidSink::Ptr semio::ros::HumanoidSinkAdapter::getHumanoidSink( std::
         if( smoothing_filter_ptr ) result = std::make_shared<semio::ros::HumanoidSinkROS>( _nh_rel, "humanoids/smoothed" );
         else result = std::make_shared<semio::ros::HumanoidSinkROS>( _nh_rel );
     }
-    else result = std::make_shared<semio::ros::HumanoidSinkROS>( ::ros::NodeHandle( _nh_rel, "/null" ) );
+    else return std::make_shared<semio::ros::HumanoidSinkROS>( ::ros::NodeHandle( _nh_rel, "/null" ) );
 
     // add a smoothing filter and a basic state filter (to remove untracked smoothed humanoids)
     if( smoothing_filter_ptr )
